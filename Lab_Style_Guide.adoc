@@ -10,6 +10,7 @@
 We want to have consistent style across our labs.
 
 Our labs usually include: 
+
 * shell commands and their output
 * YAML files
 * short code examples, including Jenkins pipelines
@@ -49,7 +50,7 @@ To access this database server we need a PostgreSQL client. Install it with the 
 on the keyboard.
 For example:
 
-[source,sh,"{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 # yum install postgresql
 ----
@@ -58,7 +59,7 @@ For example:
 on the keyboard.
 For example:
 
-[source,sh,"{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 # *yum install postgresql*
 ----
@@ -84,7 +85,7 @@ Sometimes the student should replace some parameters with her specific values.
 *IBM*, *Red Hat*, *O'Reilly* use _`monospaced italic`_ for that. 
 Example:
 
-[source,sh,"{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 # *oc get pod _pod-name_ -o yaml*
 ----
