@@ -1,0 +1,194 @@
+// Set the lab name to use it as variable throughout the text
+:labname: Using OpenShift 4
+// Include this Header Template: it configures course name, links to OpenTLC,
+// catalog items, document parameters
+include::../tools/00_0_Lab_Header_Template.adoc[]
+
+// Set some variables which you will use throughout the text
+// For example, cluster address
+:ocp_base: shared.na.openshift.opentlc.com
+:ocp_api: https://api.{ocp_base}:6443
+
+
+// Following the suggestion from https://asciidoctor.org/docs/user-manual/#applying-substitutions
+// set this variable to use it in source code snippets
+// This set of subs allows you to use bold, italic and other formatting in source code
+// or command line examples
+:markup-in-source: verbatim,attributes,quotes
+// and then use it as:
+//[source,java,subs="{markup-in-source}"] 
+
+== {labname} Lab
+
+// Set expectations here.
+// Use the Competency Model for this topic
+.Goals
+In this lab you will learn:
+
+* How to find, download, and install the `oc` command
+* How to access different clusters and switch between them
+* How to get information about your session
+
+// Describe a realistic scenario here to cover most of the lab exercises
+.Scenario
+
+You are an application developer and you want to deploy your application on an OpenShift cluster.
+You spoke with the cluster administrator and she gave you the cluster's domain name and your user credentials: username and password.
+You want to login to the cluster and prepare for application deployment.
+
+// Include this Setup Template: it describes how to provision Lab Environment
+// Also it sets numbering for chapters so you don't have to
+include::../tools/00_0_Lab_Setup_Template.adoc[]
+
+// This label is used in the Setup Template to jump here if you have already 
+// deployed lab environment
+[[labexercises]]
+// Each lab chapter's header is Level 2
+== Download and Install the Command Line Tool
+
+// Before describing the lab's steps (they are numbered),
+// start with a simple explanation what you are going to
+// do in this part.
+
+// When using command names in the text, format them with monospaced font.
+Starting from OpenShift 4.1 the `oc` command line tool can be downloaded directly from the cluster.
+// Here is how you can use variables in the text.
+In our lab the cluster's domain name is *{ocp_base}*.
+// Always keep in mind that some actual parameters might be different.
+Check the actual cluster's domain name in your environment.
+
+// Now start with the lab steps.
+// They are numbered (use dot in the beginning of each line)
+. Login to the `client vm` host using your favorite SSH client and your OpenTLC credentials.
+Then run the following commands:
+// Use the '+' to connect paragraphs and not break the numbering
+// Use the variable for subs you setup earlier
+// Use the '$' prompt for normal users and '#' for root
+// Use *bold* for commands and plain text for command output
++
+[source,sh,subs="{markup-in-source}"]
+----
+$ *wget --no-check-certificate https://downloads-openshift-console.apps.{ocp_base}/amd64/linux/oc*
+$ *sudo mv oc /usr/local/bin/oc*
+$ *sudo chmod a+x /usr/local/bin/oc*
+----
+
+. Another step
+
+== Command Line Authentication to OpenShift Master
+
+Now you have the command line tool, you know your cluster's domain name, your username and password.
+
+// Use the variable again
+// Use _italic_ to let the student know that these parameters should be replaced with
+// actual values
+* Cluster domain name: {ocp_base}
+* Your username name: _your OpenTLC login name_
+* Your password: _your OpenTLC password_
+
+. The best way to figure out the command line parameters is to ask for help the `oc` command itself:
++
+[source,sh,subs="{markup-in-source}"]
+----
+$ *oc login -h*
+Log in to your server and save login for subsequent use
+
+Usage:
+  oc login [URL] [flags]
+
+Examples:
+  # Log in interactively
+  oc login
+
+----
+
+. So, you have to figure out the correct URL for authentication.
+If your cluster administrator didn't tell you anything about that, most likely the cluster is using the default URL: `https://api.{ocp_base}:6443`.
+You can easily see the pattern: add `https://api.` to the cluster's domain name and use the port `6443`.
+// In the command line instructions use *bold* for commands that the student has to type
+// on the keyboard.
+// Use _italic_ if the student should replace the example with 
+// their specific values (e.g. user name, password, hostname, etc.)
++
+[source,sh,subs="{markup-in-source}"]
+----
+$ *oc login -u _panni-redhat.com_ {ocp_api}*
+The server uses a certificate signed by an unknown authority.
+You can bypass the certificate check, but any data you send to the server could be intercepted by others.
+Use insecure connections? (y/n): y
+
+Authentication required for {ocp_api} (openshift)
+Username: panni-redhat.com
+Password: *_OpenTLC password_*
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+----
+
+== Getting Information About Your Session
+
+. Check the `oc` command's version and the server's software version:
++
+[source,sh,subs="{markup-in-source}"]
+----
+$ *oc version --short*
+Client Version: v4.1.0-201905191700+7bd2e5b-dirty
+Server Version: v1.13.4+838b4fa
+----
+
+. Use the `oc whoami` command to get information about your user and your server:
++
+[source,sh,subs="{markup-in-source}"]
+----
+$ *oc whoami*
+panni-redhat.com
+$ *oc whoami --show-server*
+{ocp_api}
+$ *oc whoami --show-token*
+0JbpVRWM4lf0qKfUtefCbdjRl0wQOeACSsxjXoXVT8E
+$ *oc whoami --show-context*
+/api-shared-na-openshift-opentlc-com:6443/panni-redhat.com
+----
+
+You will use the `--show-token` (or `-t` for short) to pass your login credentials to some OpenShift services.
+The `--show-context` displays current project, cluster, and user. 
+You don't have any projects yet, so the first field is empty.
+Contexts can be used when you have several clusters and/or several sets of credentials so you can switch between them.
+
+
+== Another Lab Exercise
+
+== And One More Lab Exercise
+
+== Validation
+
+To validate that this lab was completed successfully execute the following command:
+
+[source,sh,subs="{markup-in-source}"]
+----
+$ *grade_lab ocp4_resources 02_1*
+Starting grade_lab Process
+Finished grade_lab Process
+
+Course name: ocp4_resources
+Lab number: 02_1
+Student id: panni-redhat.com
+
+  PASS: Check if the new-config file exists
+
+
+Grading Report:        /tmp/grading_report.txt
+Grading Log (ansible): /tmp/opentlc_ansible.log
+----
+
+== Conclusion
+
+This concludes the *{labname}* lab.
+Now you should be able to:
+// Here you rephrase the goals stated in the beginning of the lab
+* Download and install the `oc` command from the cluster
+* Figure out the login URL from the cluster's domain name
+* Login to the cluster
+* etc.
