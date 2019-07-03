@@ -1,0 +1,222 @@
+= GPTE Lab Style Guide Research
+
+// Following the suggestion from https://asciidoctor.org/docs/user-manual/#applying-substitutions
+:markup-in-source: verbatim,attributes,quotes
+// and then use it as:
+//[source,java,subs="{markup-in-source}"] 
+
+== Why Style Guide?
+
+We want to have consistent style across our labs.
+
+Our labs usually include: 
+
+* shell commands and their output
+* YAML files
+* short code examples, including Jenkins pipelines
+* Instruction steps (do this, analyze the results, then do that)
+* Explanation of the topic (plain text, sometimes with questions to the reader)
+
+The purpose of common style is to reduce friction for the learners. 
+We want to eliminate uncertainty in the instruction and make a clear distinction between the elements: 
+commands to type on the keyboard, parameters to replace with customer values, output to expect and analyze, etc.
+
+In this document we have collected examples of different formatting styles to analyze them and develop
+a common style for GPTE labs and courses.
+Namely, we analyzed the following sources:
+
+* Red Hat Style Guide: http://stylepedia.net/style/
+* IBM Style Guide: https://www.ibm.com/developerworks/library/styleguidelines/index.html and https://www.amazon.com/IBM-Style-Guide-Conventions-Writers/dp/0132101300 
+* O'Reilly style guide: http://oreillymedia.github.io/production-resources/styleguide/  
+
+
+== Shell commands and their output
+
+=== Shell commands mentioned inside the text
+
+*IBM* and *Red Hat* guides: use *`monospaced bold`* when you mention a command inside plain text.
+For example:
+
+To access this database server we need a PostgreSQL client. Install it with the *`yum`* command:
+
+*O'Reilly* guide: use `monospaced normal` when you mention a command inside plain text.
+For example:
+
+To access this database server we need a PostgreSQL client. Install it with the `yum` command:
+
+
+=== Shell commands that the student has to type
+
+*IBM* and *Red Hat* guides: use `monospaced normal` when you show the command that the student should type
+on the keyboard.
+For example:
+
+[source,subs="{markup-in-source}"]
+----
+# yum install postgresql
+----
+
+*O'Reilly* guide: use *`monospaced bold`* when you show the command that the student should type
+on the keyboard.
+For example:
+
+[source,subs="{markup-in-source}"]
+----
+# *yum install postgresql*
+----
+
+=== Shell prompt
+
+Shell prompt is used to:
+
+* Signal that this is a command that the student should type and separate it from the command output
+* Signal the difference between commands entered as normal user and commands entered as `root`. 
+
+*Red Hat*: `$` for normal users, `#` for root. No hostname or user name.
+
+*IBM*: not specified.
+
+*O'Reilly*: `$` for normal users, `#` for root. No hostname or user name. 
+In some recent books (_Cloud Native DevOps with Kubernetes_) no shell prompt at all.
+
+
+=== Shell command parameters that the student has to replace
+
+Sometimes the student should replace some parameters with her specific values.
+*IBM*, *Red Hat*, *O'Reilly* use _`monospaced italic`_ for that. 
+Example:
+
+[source,subs="{markup-in-source}"]
+----
+# *oc get pod _pod-name_ -o yaml*
+----
+
+Embedded help in the `oc` command uses `CAPS` for that (mostly because there is no _italic_ in terminal sessions)
+
+=== Command output
+
+We have to give the student example of what to expect as output of the command.
+
+*One option* is to separate the command output from the command itself, like this:
+
+Run the following command:
+
+[source,subs="{markup-in-source}"]
+----
+oc get pods
+----
+
+Example output:
+
+----
+NAME                                   READY   STATUS      RESTARTS   AGE
+pod/cakephp-mysql-example-1-9x56g      1/1     Running     0          89m
+pod/cakephp-mysql-example-1-build      0/1     Completed   0          92m
+pod/cakephp-mysql-example-1-deploy     0/1     Completed   0          90m
+pod/cakephp-mysql-example-1-hook-pre   0/1     Completed   0          89m
+pod/mysql-1-bgwsc                      1/1     Running     0          91m
+pod/mysql-1-deploy                     0/1     Completed   0          92m
+----
+
+In this case we separate the command that should be type on the keyboard from the output.
+
+*Another option* is to start the command line with a prompt (`$` or `#`) and 
+also format the command with *`bold`* font. In this case we place the command output
+right after the command to make it look like it is displayed in the terminal window.
+
+In this case we can also place several commands and their output in one block.
+
+[source,subs="{markup-in-source}"]
+----
+$ *oc get pods*
+NAME                                   READY   STATUS      RESTARTS   AGE
+pod/cakephp-mysql-example-1-9x56g      1/1     Running     0          89m
+pod/cakephp-mysql-example-1-build      0/1     Completed   0          92m
+pod/cakephp-mysql-example-1-deploy     0/1     Completed   0          90m
+pod/cakephp-mysql-example-1-hook-pre   0/1     Completed   0          89m
+pod/mysql-1-bgwsc                      1/1     Running     0          91m
+pod/mysql-1-deploy                     0/1     Completed   0          92m
+$ *oc status*
+In project OpenShift Tools (55bb-openshift-tools) on server https://api.shared.na.openshift.opentlc.com:6443
+
+http://cakephp-mysql-example-55bb-openshift-tools.apps.shared.na.openshift.opentlc.com (svc/cakephp-mysql-example)
+  dc/cakephp-mysql-example deploys istag/cakephp-mysql-example:latest <-
+    bc/cakephp-mysql-example source builds https://github.com/sclorg/cakephp-ex.git on openshift/php:7.1
+    deployment #1 deployed about an hour ago - 1 pod
+
+svc/mysql - 172.30.239.139:3306
+  dc/mysql deploys openshift/mysql:5.7
+    deployment #1 deployed 2 hours ago - 1 pod
+----
+
+
+
+=== YAML files
+
+YAML files are very common in GPTE labs.
+Sometimes we use `echo` or `cat` command to create them, like this:
+
+[source,subs="{markup-in-source}"]
+----
+echo 'kind: Service
+apiVersion: v1
+metadata:
+  name: "mongodb-internal"
+  labels:
+    name: "mongodb"
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+    name: "mongodb"' | oc create -f -
+----
+
+This way is much easier to copy-paste both for QA purposes and for students.
+But this is not how consultants are supposed to create YAML files and OpenShift objects
+in real life. 
+
+We suggest instructing students to use their favorite text editor and create YAML files in it.
+
+Like this:
+
+Use your favorite text editor to create a file named `mongo-internal-service.yaml` and 
+copy the following text into it:
+
+----
+kind: Service
+apiVersion: v1
+metadata:
+  name: "mongodb-internal"
+  labels:
+    name: "mongodb"
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+    name: "mongodb"
+----
+
+Now use the `oc` command to create the Service:
+
+[source,subs="{markup-in-source}"]
+----
+$ *oc create -f mongo-internal-service.yaml*
+----
+
+
+=== Instruction steps
+
+The common practice in documentation and training courses is to number the lab instruction steps.
+That way it's easier to support students, especially with online courses.
+Students can just tell you that they are having problems with Step 3 in Chapter 4, Module 2.
+
+It is recommended steps to give a short explanation of what we are going to achieve in this exercise
+before starting the sequence of numbered. 
