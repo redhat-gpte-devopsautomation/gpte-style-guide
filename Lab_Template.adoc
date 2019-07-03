@@ -66,7 +66,7 @@ Then run the following commands:
 // Use the '$' prompt for normal users and '#' for root
 // Use *bold* for commands and plain text for command output
 +
-[source,sh,subs="{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 $ *wget --no-check-certificate https://downloads-openshift-console.apps.{ocp_base}/amd64/linux/oc*
 $ *sudo mv oc /usr/local/bin/oc*
@@ -88,7 +88,7 @@ Now you have the command line tool, you know your cluster's domain name, your us
 
 . The best way to figure out the command line parameters is to ask for help the `oc` command itself:
 +
-[source,sh,subs="{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 $ *oc login -h*
 Log in to your server and save login for subsequent use
@@ -110,7 +110,7 @@ You can easily see the pattern: add `https://api.` to the cluster's domain name 
 // Use _italic_ if the student should replace the example with 
 // their specific values (e.g. user name, password, hostname, etc.)
 +
-[source,sh,subs="{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 $ *oc login -u _panni-redhat.com_ {ocp_api}*
 The server uses a certificate signed by an unknown authority.
@@ -131,7 +131,7 @@ You don't have any projects. You can try to create a new project, by running
 
 . Check the `oc` command's version and the server's software version:
 +
-[source,sh,subs="{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 $ *oc version --short*
 Client Version: v4.1.0-201905191700+7bd2e5b-dirty
@@ -140,7 +140,7 @@ Server Version: v1.13.4+838b4fa
 
 . Use the `oc whoami` command to get information about your user and your server:
 +
-[source,sh,subs="{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 $ *oc whoami*
 panni-redhat.com
@@ -166,7 +166,7 @@ Contexts can be used when you have several clusters and/or several sets of crede
 
 To validate that this lab was completed successfully execute the following command:
 
-[source,sh,subs="{markup-in-source}"]
+[source,subs="{markup-in-source}"]
 ----
 $ *grade_lab ocp4_resources 02_1*
 Starting grade_lab Process
