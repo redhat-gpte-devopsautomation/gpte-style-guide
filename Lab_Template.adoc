@@ -188,6 +188,7 @@ Grading Log (ansible): /tmp/opentlc_ansible.log
 This concludes the *{labname}* lab.
 Now you should be able to:
 // Here you rephrase the goals stated in the beginning of the lab
+
 * Download and install the `oc` command from the cluster
 * Figure out the login URL from the cluster's domain name
 * Login to the cluster
